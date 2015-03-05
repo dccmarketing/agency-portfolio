@@ -1,0 +1,39 @@
+.portfolio-filters-wrap {
+	text-align 		: center;
+	margin-bottom 	: 1.5em;
+
+	@media only screen and (min-width: 601px) {
+		text-align: left;
+	}
+}
+
+.portfolio-filter-label {
+	display 		: inline-block;
+	margin-right 	: 1em;
+	vertical-align 	: middle;
+}
+
+.portfolio-filters {
+	list-style 		: none;
+	display 		: inline-block;
+	margin-right 	: 3em;
+}
+
+.portfolio-filter {
+	display 		: inline-block;
+	margin-right 	: 2%;
+
+	a {
+		text-decoration: none;
+	}
+}
+
+.item-link {
+	transition 	: all 0.7s ease;
+	visibility 	: visible;
+}
+
+.hide {
+	opacity 	: 0.2;
+	transform 	: scale(0.75);
+}
