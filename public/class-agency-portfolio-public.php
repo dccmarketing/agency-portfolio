@@ -27,9 +27,9 @@ class Agency_Portfolio_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $i18n    The ID of this plugin.
+	 * @var      string    $plug_name    The ID of this plugin.
 	 */
-	private $i18n;
+	private $plug_name;
 
 	/**
 	 * The version of this plugin.
@@ -44,13 +44,13 @@ class Agency_Portfolio_Public {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @var      string    $i18n       The name of the plugin.
+	 * @var      string    $plug_name       The name of the plugin.
 	 * @var      string    $version    The version of this plugin.
 	 */
-	public function __construct( $i18n, $version ) {
+	public function __construct( $plug_name, $version ) {
 
-		$this->i18n 	= $i18n;
-		$this->version 	= $version;
+		$this->plugin_name 	= $plug_name;
+		$this->version 		= $version;
 
 	}
 
@@ -61,7 +61,7 @@ class Agency_Portfolio_Public {
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( $this->i18n, plugin_dir_url( __FILE__ ) . 'css/agency-portfolio-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/agency-portfolio-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -72,7 +72,8 @@ class Agency_Portfolio_Public {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( $this->i18n, plugin_dir_url( __FILE__ ) . 'js/agency-portfolio-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '-isotope', plugin_dir_url( __FILE__ ) . 'js/isotope.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agency-portfolio-public.min.js', array( 'jquery', $this->plugin_name . '-isotope' ), $this->version, false );
 
 	}
 
@@ -105,7 +106,7 @@ class Agency_Portfolio_Public {
 		$defaults['industries'] = '';
 		$defaults['order'] 		= '';
 		$defaults['quantity'] 	= '';
-		$args					= wp_parse_args( $atts, $defaults );
+		$args					= shortcode_atts( $defaults, $atts, 'portfolio' );
 		$items 					= $this->get_portfolio_items( $args );
 
 		include( plugin_dir_path( __FILE__ ) . 'partials/agency-portfolio-public-display.php' );
@@ -220,17 +221,17 @@ class Agency_Portfolio_Public {
 
 		$return = '';
 
-		$args['post_type'] 		= 'portfolio';
-		$args['post_status'] 	= 'publish';
-		$args['order_by'] 		= 'date';
+		$args['post_type'] 				= 'portfolio';
+		$args['post_status'] 			= 'publish';
+		$args['order_by'] 				= 'date';
+		$args['posts_per_page'] 		= 20;
+		$args['no_found_rows']			= true;
+		$args['update_post_meta_cache'] = false;
+		$args['update_post_term_cache'] = false;
 
 		if ( ! empty( $params['quantity'] ) ) {
 
 			$args['posts_per_page'] = $params['quantity'];
-
-		} else {
-
-			$args['posts_per_page'] = -1;
 
 		}
 

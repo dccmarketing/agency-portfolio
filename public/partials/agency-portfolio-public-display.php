@@ -10,9 +10,12 @@
  * @subpackage Agency_Portfolio/public/partials
  */
 
+?><div class="portfolio-filters"><?php
+
 echo $this->get_portfolio_filters();
 
-?><div class="portfolio-items-wrap"><?php
+?></div>
+<div class="portfolio-items-wrap"><?php
 
 foreach ( $items->posts as $item ) {
 

@@ -16,7 +16,7 @@ $classes 	= $this->get_cats_as_classes( $item->ID );
 //pretty( $classes ); ?>
 
 <a href="<?php echo get_permalink( $item->ID ); ?>" class="item-link <?php echo $classes; ?>">
-	<div <?php post_class( 'item-wrapper '); ?> style="background-image:url(<?php echo $this->get_thumbnail_url( $item->ID ); ?>);">
+	<div <?php post_class( 'item-wrapper '); ?> style="background-image:url(<?php echo $this->get_thumbnail_url( $item->ID, 'med' ); ?>);">
 		<div class="dcchover">
 			<p class="item-name"><?php echo $item->post_title; ?></p>
 		</div>

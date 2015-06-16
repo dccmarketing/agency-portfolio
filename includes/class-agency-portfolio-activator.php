@@ -23,13 +23,17 @@
 class Agency_Portfolio_Activator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
+	 * Creates custom post types and plugin settings, then flushes rewrite rules
 	 *
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-agency-portfolio-admin.php';
+
+		Agency_Portfolio_Admin::new_cpt_portfolio();
+
+		flush_rewrite_rules();
 
 	}
 

@@ -44,9 +44,9 @@ class Agency_Portfolio {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $i18n    The string used to uniquely identify this plugin.
+	 * @var      string    $plug_name    The string used to uniquely identify this plugin.
 	 */
-	protected $i18n;
+	protected $plug_name;
 
 	/**
 	 * The current version of the plugin.
@@ -68,8 +68,8 @@ class Agency_Portfolio {
 	 */
 	public function __construct() {
 
-		$this->i18n 	= 'agency-portfolio';
-		$this->version 	= '1.0.0';
+		$this->plugin_name 	= 'agency-portfolio';
+		$this->version 		= '1.0.0';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -119,24 +119,6 @@ class Agency_Portfolio {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-agency-portfolio-public.php';
 
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-admin-generator.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-field-generator.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-sanitizer.php';
-
 		$this->loader = new Agency_Portfolio_Loader();
 
 	}
@@ -153,7 +135,7 @@ class Agency_Portfolio {
 	private function set_locale() {
 
 		$plugin_i18n = new Agency_Portfolio_i18n();
-		$plugin_i18n->set_domain( $this->get_i18n() );
+		$plugin_i18n->set_domain( $this->get_plugin_name() );
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -168,7 +150,7 @@ class Agency_Portfolio {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Agency_Portfolio_Admin( $this->get_i18n(), $this->get_version() );
+		$plugin_admin = new Agency_Portfolio_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', 	$plugin_admin, 	'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', 	$plugin_admin, 	'enqueue_scripts' );
@@ -189,7 +171,7 @@ class Agency_Portfolio {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Agency_Portfolio_Public( $this->get_i18n(), $this->get_version() );
+		$plugin_public = new Agency_Portfolio_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', 	$plugin_public, 	'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', 	$plugin_public, 	'enqueue_scripts' );
@@ -213,8 +195,8 @@ class Agency_Portfolio {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_i18n() {
-		return $this->i18n;
+	public function get_plugin_name() {
+		return $this->plugin_name;
 	}
 
 	/**

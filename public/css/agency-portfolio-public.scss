@@ -15,8 +15,6 @@
 
 .portfolio-filters {
 	list-style 		: none;
-	display 		: inline-block;
-	margin-right 	: 3em;
 }
 
 .portfolio-filter {
@@ -29,11 +27,10 @@
 }
 
 .item-link {
-	transition 	: all 0.7s ease;
 	visibility 	: visible;
 }
 
 .hide {
 	opacity 	: 0.2;
-	transform 	: scale(0.75);
+	//transform 	: scale(0.75);
 }

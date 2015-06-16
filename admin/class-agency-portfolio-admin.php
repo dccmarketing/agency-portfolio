@@ -23,22 +23,13 @@
 class Agency_Portfolio_Admin {
 
 	/**
-	 * The admin generator object
-	 *
-	 * @since 	1.0.0
-	 * @access 	private
-	 * @var 	object 		$admingen		The admin generator class instance
-	 */
-	private $admingen;
-
-	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $i18n    The ID of this plugin.
+	 * @var      string    $plug_name    The ID of this plugin.
 	 */
-	private $i18n;
+	private $plug_name;
 
 	/**
 	 * The name of the plugin options
@@ -62,59 +53,16 @@ class Agency_Portfolio_Admin {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @var      string    $i18n       The name of this plugin.
+	 * @var      string    $plug_name       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
 	 */
-	public function __construct( $i18n, $version ) {
+	public function __construct( $plug_name, $version ) {
 
-		$this->i18n 	= $i18n;
-		$this->version 	= $version;
-		$this->options 	= 'testoptions';
-
-		//$this->load_dependencies();
-		//$this->set_locale();
+		$this->plugin_name 	= $plug_name;
+		$this->version 		= $version;
+		$this->options 		= 'testoptions';
 
 	}
-
-	/**
-	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - Agency_Portfolio_Loader. Orchestrates the hooks of the plugin.
-	 * - Agency_Portfolio_i18n. Defines internationalization functionality.
-	 * - Agency_Portfolio_Admin. Defines all hooks for the dashboard.
-	 * - Agency_Portfolio_Public. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function load_dependencies() {
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-admin-generator.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-field-generator.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-agency-portfolio-sanitizer.php';
-
-		//$this->admingen = new Agency_Portfolio_Admin_Generator();
-
-	} // load_dependencies()
 
 	/**
 	 * Adds the plugin settings page to the appropriate admin menu
@@ -129,7 +77,7 @@ class Agency_Portfolio_Admin {
 				'Agency Portfolio Options',
 				'Agency Portfolio',
 				'manage_options',
-				$this->i18n,
+				'agency-portfolio',
 				array( $this, 'settings_page' )
 			);
 
@@ -154,7 +102,7 @@ class Agency_Portfolio_Admin {
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( $this->i18n, plugin_dir_url( __FILE__ ) . 'css/agency-portfolio-admin.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( 'agency-portfolio', plugin_dir_url( __FILE__ ) . 'css/agency-portfolio-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -165,7 +113,7 @@ class Agency_Portfolio_Admin {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( $this->i18n, plugin_dir_url( __FILE__ ) . 'js/agency-portfolio-admin.js', array( 'jquery' ), $this->version, false );
+		//wp_enqueue_script( 'agency-portfolio', plugin_dir_url( __FILE__ ) . 'js/agency-portfolio-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -174,12 +122,12 @@ class Agency_Portfolio_Admin {
 	 *
 	 * @uses   register_post_type()
 	 */
-	public function new_cpt_portfolio() {
+	public static function new_cpt_portfolio() {
 
 		$cap_type 	= 'post';
 		$plural 	= 'Portfolio Items';
 		$single 	= 'Portfolio Item';
-		$cpt_name 	= 'Portfolio';
+		$cpt_name 	= 'portfolio';
 
 		$opts['can_export']								= TRUE;
 		$opts['capability_type']						= $cap_type;
@@ -216,28 +164,28 @@ class Agency_Portfolio_Admin {
 		$opts['capabilities']['read_post']				= "read_{$cap_type}";
 		$opts['capabilities']['read_private_posts']		= "read_private_{$cap_type}s";
 
-		$opts['labels']['add_new']						= __( "Add New {$single}", $this->i18n );
-		$opts['labels']['add_new_item']					= __( "Add New {$single}", $this->i18n );
-		$opts['labels']['all_items']					= __( $plural, $this->i18n );
-		$opts['labels']['edit_item']					= __( "Edit {$single}" , $this->i18n);
-		$opts['labels']['menu_name']					= __( $cpt_name, $this->i18n );
-		$opts['labels']['name']							= __( $plural, $this->i18n );
-		$opts['labels']['name_admin_bar']				= __( $single, $this->i18n );
-		$opts['labels']['new_item']						= __( "New {$single}", $this->i18n );
-		$opts['labels']['not_found']					= __( "No {$plural} Found", $this->i18n );
-		$opts['labels']['not_found_in_trash']			= __( "No {$plural} Found in Trash", $this->i18n );
-		$opts['labels']['parent_item_colon']			= __( "Parent {$plural} :", $this->i18n );
-		$opts['labels']['search_items']					= __( "Search {$plural}", $this->i18n );
-		$opts['labels']['singular_name']				= __( $single, $this->i18n );
-		$opts['labels']['view_item']					= __( "View {$single}", $this->i18n );
+		$opts['labels']['add_new']						= esc_html__( "Add New {$single}", 'agency-portfolio' );
+		$opts['labels']['add_new_item']					= esc_html__( "Add New {$single}", 'agency-portfolio' );
+		$opts['labels']['all_items']					= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['edit_item']					= esc_html__( "Edit {$single}" , 'agency-portfolio');
+		$opts['labels']['menu_name']					= esc_html__( $cpt_name, 'agency-portfolio' );
+		$opts['labels']['name']							= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['name_admin_bar']				= esc_html__( $single, 'agency-portfolio' );
+		$opts['labels']['new_item']						= esc_html__( "New {$single}", 'agency-portfolio' );
+		$opts['labels']['not_found']					= esc_html__( "No {$plural} Found", 'agency-portfolio' );
+		$opts['labels']['not_found_in_trash']			= esc_html__( "No {$plural} Found in Trash", 'agency-portfolio' );
+		$opts['labels']['parent_item_colon']			= esc_html__( "Parent {$plural} :", 'agency-portfolio' );
+		$opts['labels']['search_items']					= esc_html__( "Search {$plural}", 'agency-portfolio' );
+		$opts['labels']['singular_name']				= esc_html__( $single, 'agency-portfolio' );
+		$opts['labels']['view_item']					= esc_html__( "View {$single}", 'agency-portfolio' );
 
 		$opts['rewrite']['ep_mask']						= EP_PERMALINK;
 		$opts['rewrite']['feeds']						= FALSE;
 		$opts['rewrite']['pages']						= TRUE;
-		$opts['rewrite']['slug']						= __( strtolower( $plural ), $this->i18n );
+		$opts['rewrite']['slug']						= $cpt_name;
 		$opts['rewrite']['with_front']					= FALSE;
 
-		register_post_type( strtolower( $cpt_name ), $opts );
+		register_post_type( $cpt_name, $opts );
 
 	} // new_cpt_portfolio()
 
@@ -268,27 +216,27 @@ class Agency_Portfolio_Admin {
 		$opts['capabilities']['edit_terms'] 			= 'manage_categories';
 		$opts['capabilities']['manage_terms'] 			= 'manage_categories';
 
-		$opts['labels']['add_new_item'] 				= __( "Add New {$single}", $this->i18n );
-		$opts['labels']['add_or_remove_items'] 			= __( "Add or remove {$plural}", $this->i18n );
-		$opts['labels']['all_items'] 					= __( $plural, $this->i18n );
-		$opts['labels']['choose_from_most_used'] 		= __( "Choose from most used {$plural}", $this->i18n );
-		$opts['labels']['edit_item'] 					= __( "Edit {$single}" , $this->i18n);
-		$opts['labels']['menu_name'] 					= __( $plural, $this->i18n );
-		$opts['labels']['name'] 						= __( $plural, $this->i18n );
-		$opts['labels']['new_item_name'] 				= __( "New {$single} Name", $this->i18n );
-		$opts['labels']['not_found'] 					= __( "No {$plural} Found", $this->i18n );
-		$opts['labels']['parent_item'] 					= __( "Parent {$single}", $this->i18n );
-		$opts['labels']['parent_item_colon'] 			= __( "Parent {$single}:", $this->i18n );
-		$opts['labels']['popular_items'] 				= __( "Popular {$plural}", $this->i18n );
-		$opts['labels']['search_items'] 				= __( "Search {$plural}", $this->i18n );
-		$opts['labels']['separate_items_with_commas'] 	= __( "Separate {$plural} with commas", $this->i18n );
-		$opts['labels']['singular_name'] 				= __( $single, $this->i18n );
-		$opts['labels']['update_item'] 					= __( "Update {$single}", $this->i18n );
-		$opts['labels']['view_item'] 					= __( "View {$single}", $this->i18n );
+		$opts['labels']['add_new_item'] 				= esc_html__( "Add New {$single}", 'agency-portfolio' );
+		$opts['labels']['add_or_remove_items'] 			= esc_html__( "Add or remove {$plural}", 'agency-portfolio' );
+		$opts['labels']['all_items'] 					= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['choose_from_most_used'] 		= esc_html__( "Choose from most used {$plural}", 'agency-portfolio' );
+		$opts['labels']['edit_item'] 					= esc_html__( "Edit {$single}" , 'agency-portfolio');
+		$opts['labels']['menu_name'] 					= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['name'] 						= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['new_item_name'] 				= esc_html__( "New {$single} Name", 'agency-portfolio' );
+		$opts['labels']['not_found'] 					= esc_html__( "No {$plural} Found", 'agency-portfolio' );
+		$opts['labels']['parent_item'] 					= esc_html__( "Parent {$single}", 'agency-portfolio' );
+		$opts['labels']['parent_item_colon'] 			= esc_html__( "Parent {$single}:", 'agency-portfolio' );
+		$opts['labels']['popular_items'] 				= esc_html__( "Popular {$plural}", 'agency-portfolio' );
+		$opts['labels']['search_items'] 				= esc_html__( "Search {$plural}", 'agency-portfolio' );
+		$opts['labels']['separate_items_with_commas'] 	= esc_html__( "Separate {$plural} with commas", 'agency-portfolio' );
+		$opts['labels']['singular_name'] 				= esc_html__( $single, 'agency-portfolio' );
+		$opts['labels']['update_item'] 					= esc_html__( "Update {$single}", 'agency-portfolio' );
+		$opts['labels']['view_item'] 					= esc_html__( "View {$single}", 'agency-portfolio' );
 
 		$opts['rewrite']['ep_mask']						= EP_NONE;
 		$opts['rewrite']['hierarchical']				= FALSE;
-		$opts['rewrite']['slug']						= __( strtolower( $tax_name ), $this->i18n );
+		$opts['rewrite']['slug']						= esc_html__( strtolower( $tax_name ), 'agency-portfolio' );
 		$opts['rewrite']['with_front']					= FALSE;
 
 		register_taxonomy( $tax_name, 'portfolio', $opts );
@@ -322,27 +270,27 @@ class Agency_Portfolio_Admin {
 		$opts['capabilities']['edit_terms'] 			= 'manage_categories';
 		$opts['capabilities']['manage_terms'] 			= 'manage_categories';
 
-		$opts['labels']['add_new_item'] 				= __( "Add New {$single}", $this->i18n );
-		$opts['labels']['add_or_remove_items'] 			= __( "Add or remove {$plural}", $this->i18n );
-		$opts['labels']['all_items'] 					= __( $plural, $this->i18n );
-		$opts['labels']['choose_from_most_used'] 		= __( "Choose from most used {$plural}", $this->i18n );
-		$opts['labels']['edit_item'] 					= __( "Edit {$single}" , $this->i18n);
-		$opts['labels']['menu_name'] 					= __( $plural, $this->i18n );
-		$opts['labels']['name'] 						= __( $plural, $this->i18n );
-		$opts['labels']['new_item_name'] 				= __( "New {$single} Name", $this->i18n );
-		$opts['labels']['not_found'] 					= __( "No {$plural} Found", $this->i18n );
-		$opts['labels']['parent_item'] 					= __( "Parent {$single}", $this->i18n );
-		$opts['labels']['parent_item_colon'] 			= __( "Parent {$single}:", $this->i18n );
-		$opts['labels']['popular_items'] 				= __( "Popular {$plural}", $this->i18n );
-		$opts['labels']['search_items'] 				= __( "Search {$plural}", $this->i18n );
-		$opts['labels']['separate_items_with_commas'] 	= __( "Separate {$plural} with commas", $this->i18n );
-		$opts['labels']['singular_name'] 				= __( $single, $this->i18n );
-		$opts['labels']['update_item'] 					= __( "Update {$single}", $this->i18n );
-		$opts['labels']['view_item'] 					= __( "View {$single}", $this->i18n );
+		$opts['labels']['add_new_item'] 				= esc_html__( "Add New {$single}", 'agency-portfolio' );
+		$opts['labels']['add_or_remove_items'] 			= esc_html__( "Add or remove {$plural}", 'agency-portfolio' );
+		$opts['labels']['all_items'] 					= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['choose_from_most_used'] 		= esc_html__( "Choose from most used {$plural}", 'agency-portfolio' );
+		$opts['labels']['edit_item'] 					= esc_html__( "Edit {$single}" , 'agency-portfolio');
+		$opts['labels']['menu_name'] 					= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['name'] 						= esc_html__( $plural, 'agency-portfolio' );
+		$opts['labels']['new_item_name'] 				= esc_html__( "New {$single} Name", 'agency-portfolio' );
+		$opts['labels']['not_found'] 					= esc_html__( "No {$plural} Found", 'agency-portfolio' );
+		$opts['labels']['parent_item'] 					= esc_html__( "Parent {$single}", 'agency-portfolio' );
+		$opts['labels']['parent_item_colon'] 			= esc_html__( "Parent {$single}:", 'agency-portfolio' );
+		$opts['labels']['popular_items'] 				= esc_html__( "Popular {$plural}", 'agency-portfolio' );
+		$opts['labels']['search_items'] 				= esc_html__( "Search {$plural}", 'agency-portfolio' );
+		$opts['labels']['separate_items_with_commas'] 	= esc_html__( "Separate {$plural} with commas", 'agency-portfolio' );
+		$opts['labels']['singular_name'] 				= esc_html__( $single, 'agency-portfolio' );
+		$opts['labels']['update_item'] 					= esc_html__( "Update {$single}", 'agency-portfolio' );
+		$opts['labels']['view_item'] 					= esc_html__( "View {$single}", 'agency-portfolio' );
 
 		$opts['rewrite']['ep_mask']						= EP_NONE;
 		$opts['rewrite']['hierarchical']				= FALSE;
-		$opts['rewrite']['slug']						= __( strtolower( $tax_name ), $this->i18n );
+		$opts['rewrite']['slug']						= esc_html__( strtolower( $tax_name ), 'agency-portfolio' );
 		$opts['rewrite']['with_front']					= FALSE;
 
 		register_taxonomy( $tax_name, 'portfolio', $opts );
